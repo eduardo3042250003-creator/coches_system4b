@@ -13,18 +13,7 @@ class App:
     def borrarPantalla (self):
         for widget in self.ventana.winfo_children():
             widget.destroy()
-    def ejecutarTodoAct(self):
-        self.actualizarCochesController()
-        self.borrarPantalla()
-        self.actualizarCochesView()
-    def ejecutarTodoIns(self):
-        self.insertarCochesController()
-        self.borrarPantalla()
-        self.InsertarCochesView()
-    def ejecutarTodobor(self):
-        self.borrarCochesController()
-        self.borrarPantalla()
-        self.borrarCochesView()
+    
         
     def main (self):
         self.borrarPantalla()
@@ -62,7 +51,7 @@ class App:
         Label(self.ventana, text="asientos").pack(pady=10)
         self.asientos = Entry(self.ventana)
         self.asientos.pack(pady=5)
-        Button(self.ventana, text='agregar', command= self.ejecutarTodoIns).pack(pady=5)
+        Button(self.ventana, text='agregar', command=lambda: {self.insertarCochesController(), self.InsertarCochesView()}).pack(pady=5)
         Button(self.ventana, text='::Regresar::', command= self.menuAcciones).pack(pady=5)
     def borrarCochesView(self):
         self.borrarPantalla()
@@ -71,7 +60,7 @@ class App:
         self.idBorrar.focus()
         self.idBorrar.pack(pady = 5)
 
-        Button(self.ventana, text='Borrar', command= self.ejecutarTodobor).pack(pady=5)
+        Button(self.ventana, text='Borrar', command= lambda: {self.borrarCochesController(), self.borrarCochesView()}).pack(pady=5)
         Button(self.ventana, text='::Regresar::', command= self.menuAcciones).pack(pady=5)
     def actualizarCochesView(self):
         self.borrarPantalla()
@@ -97,7 +86,7 @@ class App:
         Label(self.ventana, text="asientos").pack(pady=10)
         self.asientosAct = Entry(self.ventana)
         self.asientosAct.pack(pady=5)
-        Button(self.ventana, text='Actualizar', command= self.ejecutarTodoAct).pack(pady=5)
+        Button(self.ventana, text='Actualizar', command= lambda: {self.actualizarCochesController(),self.actualizarCochesView()}).pack(pady=5)
         Button(self.ventana, text='::Regresar::', command= self.menuAcciones).pack(pady=5)
     def mostrarCochesView(self):
         self.borrarPantalla()
