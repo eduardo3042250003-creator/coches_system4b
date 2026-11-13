@@ -59,8 +59,9 @@ class App:
         self.idBorrar = Entry(self.ventana)
         self.idBorrar.focus()
         self.idBorrar.pack(pady = 5)
-
-        Button(self.ventana, text='Borrar', command= lambda: {self.borrarCochesController(), self.borrarCochesView()}).pack(pady=5)
+        self.btn_buscar = Button(self.ventana, text='buscar', command= lambda: self.buscarController("borrar"))
+        self.btn_eliminar = Button(self.ventana, text='eliminar', command= lambda:{self.borrarCochesController(), self.borrarCochesView()})
+        self.btn_eliminar.pack(pady=5)
         Button(self.ventana, text='::Regresar::', command= self.menuAcciones).pack(pady=5)
     def actualizarCochesView(self):
         self.borrarPantalla()
@@ -111,6 +112,26 @@ class App:
                 tabla.insert("",tk.END, values=coche)
         tabla.pack(pady=10, fill="both", expand=True)
         Button(self.ventana, text="Volver", command=self.menuAcciones).pack(pady=10)
+    def cambiarEstadoBoton(self, estado, tipoAccion):
+        if estado:
+            if tipoAccion == "borrar":
+                self.btn_eliminar.config(state=tk.NORMAL)
+            elif tipoAccion == "actualizar":
+                self.btn_actualizar.config(state=tk.NORMAL)
+        else:
+            if tipoAccion == "borrar":
+                self.btn_eliminar.config(state=tk.DISABLED)
+            elif tipoAccion == "actualizar":
+                self.btn_actualizar.config(state=tk.DISABLED)
+
+    def confirmacion_eliminar(self, tipo):
+        resp = messagebox.askyesno(title="Confirmación", message=f"¿Estás seguro de que deseas {tipo} este coche?") 
+        if resp == "Yes":
+            return True
+        else:
+            return False
+
+##controllers        
     def respuesta_sql(self,respuesta):
         if respuesta:
             messagebox.showinfo(title="::EXITO::",message="Accion como yo ...exitosa")
@@ -123,14 +144,28 @@ class App:
         del coche1
     def borrarCochesController(self):
         id = self.idBorrar.get()
-        respuesta = cochesbd.Cochesbd.eliminar(id)
-        self.respuesta_sql(respuesta)
+        resp = self.confirmacion_eliminar("eliminar") 
+        if resp == True:
+            respuesta = cochesbd.Cochesbd.eliminar(id)
+        else:
+            self.respuesta_sql(respuesta)
     def actualizarCochesController(self):
         id = self.idActualizar.get()
         coche1 = cochesbd.Cochesbd(self.marcaAct.get(),self.colorAct.get(),self.modeloAct.get(),self.velocidadAct.get(),self.potenciaAct.get(),self.asientosAct.get(),)
         respuesta = coche1.actualizar(id)
         self.respuesta_sql(respuesta)
         del coche1
+    def buscarController(self,tipoAccion):
+        id = self.idBorrar.get()
+        coche1 = cochesbd.Cochesbd.buscar(id)
+        if len(coche1) > 0:
+            messagebox.showinfo(title="registro encontrado",message=f"El coche con id {id} existe en la base de datos puiedes {tipoAccion}lo")
+            self.cambiarEstadoBoton(True, tipoAccion)
+        else:
+            messagebox.showerror(title="registro no encontrado",message=f"El coche con id {id} no existe en la base de datos")
+            self.cambiarEstadoBoton(False, tipoAccion)
+
+
     def mostrarCochescontroller(self):
         obtenerCoches =  cochesbd.Cochesbd.consultar()
         return obtenerCoches

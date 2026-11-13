@@ -25,6 +25,13 @@ class Cochesbd:
         except:
             return []
     @staticmethod
+    def buscar(id):
+        try:
+            cursor.execute("select * from coches where id=%s", (id,))
+            return cursor.fetchall()
+        except:
+            return []
+    @staticmethod
     def eliminar(id):
         try:
             cursor.execute( "select * from coches where id=%s",(id,))
