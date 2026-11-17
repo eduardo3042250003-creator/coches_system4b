@@ -60,6 +60,7 @@ class App:
         self.idBorrar.focus()
         self.idBorrar.pack(pady = 5)
         self.btn_buscar = Button(self.ventana, text='buscar', command= lambda: self.buscarController("borrar"))
+        self.btn_buscar.pack(pady=5)
         self.btn_eliminar = Button(self.ventana, text='eliminar', command= lambda:{self.borrarCochesController(), self.borrarCochesView()})
         self.btn_eliminar.pack(pady=5)
         Button(self.ventana, text='::Regresar::', command= self.menuAcciones).pack(pady=5)
@@ -147,8 +148,10 @@ class App:
         resp = self.confirmacion_eliminar("eliminar") 
         if resp == True:
             respuesta = cochesbd.Cochesbd.eliminar(id)
-        else:
             self.respuesta_sql(respuesta)
+    
+        
+            
     def actualizarCochesController(self):
         id = self.idActualizar.get()
         coche1 = cochesbd.Cochesbd(self.marcaAct.get(),self.colorAct.get(),self.modeloAct.get(),self.velocidadAct.get(),self.potenciaAct.get(),self.asientosAct.get(),)
