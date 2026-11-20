@@ -87,12 +87,12 @@ class App:
         self.var_asientos = StringVar()
         
         Label(self.ventana,text="Marca: ").pack(pady=5)
-        self.marcaAct=Entry(self.ventana,textvariable=self.var_marca)
-        self.marcaAct.pack(pady=5)
+        self.marca=Entry(self.ventana,textvariable=self.var_marca)
+        self.marca.pack(pady=5)
         
         Label(self.ventana,text="Color: ").pack(pady=5)
-        self.colorAct=Entry(self.ventana,textvariable=self.var_color)
-        self.colorAct.pack(pady=5)
+        self.color=Entry(self.ventana,textvariable=self.var_color)
+        self.color.pack(pady=5)
         
         Label(self.ventana,text="Modelo: ").pack(pady=5)
         self.modelo=Entry(self.ventana,textvariable=self.var_modelo)
@@ -179,7 +179,7 @@ class App:
             
     def actualizarCochesController(self):
         id = self.id.get()
-        coche1 = cochesbd.Cochesbd(self.marcaAct.get(),self.colorAct.get(),self.modeloAct.get(),self.velocidadAct.get(),self.potenciaAct.get(),self.asientosAct.get(),)
+        coche1 = cochesbd.Cochesbd(self.marca.get(),self.color.get(),self.modelo.get(),self.velocidad.get(),self.potencia.get(),self.asientos.get(),)
         respuesta = coche1.actualizar(id)
         self.respuesta_sql(respuesta)
         del coche1

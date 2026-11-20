@@ -49,7 +49,7 @@ class Cochesbd:
             cursor.execute( "select * from coches where id=%s",(id,))
             lista = cursor.fetchall()
             if len (lista) > 0:
-                sql = "UPDATE coches SET marca = %s, color = %s, modelo = %s, velocidad = %s, potencia = %s, asientos = %s WHERE id = %s"
+                sql = "UPDATE coches SET marca = %s, color = %s, modeo = %s, velocidad = %s, potencia = %s, asientos = %s WHERE id = %s"
                 valores = (self._marca, self._color, self._modelo, self._velocidad, self._potencia, self._asientos, id)
                 cursor.execute(sql, valores)
                 conexion.commit()
