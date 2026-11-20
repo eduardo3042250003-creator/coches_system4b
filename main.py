@@ -1,7 +1,6 @@
 from coches import cochesbd
 import tkinter as tk
-from tkinter import Tk,Label,Entry,Button,StringVar
-from tkinter import messagebox
+from tkinter import Tk,Label,Entry,Button,StringVar, messagebox,Menu
 from tkinter import ttk
 class App:
     def __init__(self,ventana):
@@ -12,14 +11,39 @@ class App:
         self.main()
     def borrarPantalla (self):
         for widget in self.ventana.winfo_children():
-            widget.destroy()    
+            widget.destroy()   
+        
+            
+    def barraMenu(self):
+        #Menu de Opciones
+        menuBar = Menu(self.ventana)
+        self.ventana.config(menu=menuBar)
+
+
+        menuPrincipal = Menu(menuBar , tearoff=False)
+        menuBar.add_cascade(label="Principal" , menu=menuPrincipal)
+        menuPrincipal.add_command(label="Menu Principal",command=self.main)
+        menuPrincipal.add_command(label="Menu Acciones",command=self.menuAcciones)
+        menuPrincipal.add_separator()
+        menuPrincipal.add_command(label="Salir",command=self.ventana.quit)
+                
+        accionesMenu = Menu(menuBar , tearoff=False)
+        menuBar.add_cascade(label="Acciones" , menu=accionesMenu)
+        accionesMenu.add_command(label="Agregar",command=self.InsertarCochesView )
+        accionesMenu.add_command(label="Borrar",command=self.borrarCochesView)
+        accionesMenu.add_command(label="Modificar",command=self.actualizarCochesView)
+        accionesMenu.add_command(label="Mostrar",command=self.mostrarCochesView)
+        accionesMenu.add_separator()
+        accionesMenu.add_command(label="Regresar",command=self.main)
     def main (self):
         self.borrarPantalla()
+        self.barraMenu()
         Label(self.ventana,text ="::: MENU PRINCIPAL:::").pack(pady=20)
         Button(self.ventana,text='1.- Coches', command=self.menuAcciones).pack(pady=10)
         Button(self.ventana,text='2.- salir',command=self.ventana.quit).pack(pady=10)
     def menuAcciones(self,):
         self.borrarPantalla()
+        self.barraMenu()
         tipo = "Coches"
         Label (self.ventana, text = f':::: menu de {tipo}:::: ').pack(pady = 10)
         Button(self.ventana, text = f"1.-agregar", command=self.InsertarCochesView).pack(pady=10)
@@ -29,6 +53,7 @@ class App:
         Button(self.ventana, text = f"5.-salir", command=self.main).pack(pady=10)
     def InsertarCochesView(self):
         self.borrarPantalla()
+        self.barraMenu()
         Label(self.ventana, text="ingresar datos del Coche").pack(pady=10)
         Label(self.ventana, text="Marca").pack(pady=10)
         self.marca = Entry(self.ventana)
@@ -53,6 +78,7 @@ class App:
         Button(self.ventana, text='::Regresar::', command= self.menuAcciones).pack(pady=5)
     def borrarCochesView(self):
         self.borrarPantalla()
+        self.barraMenu()
         Label(self.ventana, text="ingresar el id del coche que deseas borrar").pack(pady=10)
         self.idBorrar = Entry(self.ventana)
         self.idBorrar.focus()
@@ -66,6 +92,7 @@ class App:
     def actualizarCochesView(self):
 
         self.borrarPantalla()
+        self.barraMenu()
         Label(self.ventana,text="...Ingresar el ID del coche a modificar").pack(pady=10)
         
         Label(self.ventana,text="ID: ").pack(pady=5)
@@ -116,12 +143,9 @@ class App:
         Button(self.ventana,text=":: Regresar ::",command=self.menuAcciones).pack(pady=5)
     def mostrarCochesView(self):
         self.borrarPantalla()
+        self.barraMenu()
         Label(self.ventana, text="Lista de Coches").pack(pady=10)
         datos = self.mostrarCochescontroller()
-        """
-        Label(self.ventana, text=f"{datos}").pack(pady=5)
-        Button(self.ventana,text="Volver",command=self.menuAcciones).pack(pady=10)
-        """
         style = ttk.Style()
         style.theme_use("clam")
         style.configure("Treeview",borderwidth=2,relief="solid")
@@ -155,8 +179,7 @@ class App:
             return True
         else:
             return False
-
-##controllers        
+       
     def respuesta_sql(self,respuesta):
         if respuesta:
             messagebox.showinfo(title="::EXITO::",message="Accion como yo ...exitosa")
@@ -174,9 +197,6 @@ class App:
             respuesta = cochesbd.Cochesbd.eliminar(id)
             self.respuesta_sql(respuesta)
 
-
-        
-            
     def actualizarCochesController(self):
         id = self.id.get()
         coche1 = cochesbd.Cochesbd(self.marca.get(),self.color.get(),self.modelo.get(),self.velocidad.get(),self.potencia.get(),self.asientos.get(),)
