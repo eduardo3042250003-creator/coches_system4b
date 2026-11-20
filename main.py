@@ -1,6 +1,6 @@
 from coches import cochesbd
 import tkinter as tk
-from tkinter import Tk,Label,Entry,Button
+from tkinter import Tk,Label,Entry,Button,StringVar
 from tkinter import messagebox
 from tkinter import ttk
 class App:
@@ -12,9 +12,7 @@ class App:
         self.main()
     def borrarPantalla (self):
         for widget in self.ventana.winfo_children():
-            widget.destroy()
-    
-        
+            widget.destroy()    
     def main (self):
         self.borrarPantalla()
         Label(self.ventana,text ="::: MENU PRINCIPAL:::").pack(pady=20)
@@ -62,34 +60,60 @@ class App:
         self.btn_buscar = Button(self.ventana, text='buscar', command= lambda: self.buscarController("borrar"))
         self.btn_buscar.pack(pady=5)
         self.btn_eliminar = Button(self.ventana, text='eliminar', command= lambda:{self.borrarCochesController(), self.borrarCochesView()})
+        self.btn_eliminar.config(state=tk.DISABLED)
         self.btn_eliminar.pack(pady=5)
         Button(self.ventana, text='::Regresar::', command= self.menuAcciones).pack(pady=5)
     def actualizarCochesView(self):
+
         self.borrarPantalla()
-        Label(self.ventana, text="ingresar el id del coche que deseas actualizar").pack(pady=10)
-        self.idActualizar = Entry(self.ventana)
-        self.idActualizar.focus()
-        self.idActualizar.pack(pady = 5)
-        Label(self.ventana, text="Marca").pack(pady=10)
-        self.marcaAct = Entry(self.ventana)
+        Label(self.ventana,text="...Ingresar el ID del coche a modificar").pack(pady=10)
+        
+        Label(self.ventana,text="ID: ").pack(pady=5)
+        self.id=Entry(self.ventana)
+        self.id.focus()
+        self.id.pack(pady=5)
+        
+        self.btn_buscar=Button(self.ventana,text="Buscar",command=lambda:self.buscarController("modificar"))
+        self.btn_buscar.pack(pady=5)
+        
+        Label(self.ventana,text="...Datos del Coche").pack(pady=10)
+        
+        # Variables asociadas a los campos
+        self.var_marca = StringVar()
+        self.var_color = StringVar()
+        self.var_modelo = StringVar()
+        self.var_velocidad = StringVar()
+        self.var_potencia = StringVar()
+        self.var_asientos = StringVar()
+        
+        Label(self.ventana,text="Marca: ").pack(pady=5)
+        self.marcaAct=Entry(self.ventana,textvariable=self.var_marca)
         self.marcaAct.pack(pady=5)
-        Label(self.ventana, text="Color").pack(pady=10)
-        self.colorAct = Entry(self.ventana)
+        
+        Label(self.ventana,text="Color: ").pack(pady=5)
+        self.colorAct=Entry(self.ventana,textvariable=self.var_color)
         self.colorAct.pack(pady=5)
-        Label(self.ventana, text="Modelo").pack(pady=10)
-        self.modeloAct = Entry(self.ventana)
-        self.modeloAct.pack(pady=5)
-        Label(self.ventana, text="Velocidad").pack(pady=10)
-        self.velocidadAct = Entry(self.ventana)
-        self.velocidadAct.pack(pady=5)
-        Label(self.ventana, text="Potencia").pack(pady=10)
-        self.potenciaAct = Entry(self.ventana)
-        self.potenciaAct.pack(pady=5)
-        Label(self.ventana, text="asientos").pack(pady=10)
-        self.asientosAct = Entry(self.ventana)
-        self.asientosAct.pack(pady=5)
-        Button(self.ventana, text='Actualizar', command= lambda: {self.actualizarCochesController(),self.actualizarCochesView()}).pack(pady=5)
-        Button(self.ventana, text='::Regresar::', command= self.menuAcciones).pack(pady=5)
+        
+        Label(self.ventana,text="Modelo: ").pack(pady=5)
+        self.modelo=Entry(self.ventana,textvariable=self.var_modelo)
+        self.modelo.pack(pady=5)
+        
+        Label(self.ventana,text="Velocidad: ").pack(pady=5)
+        self.velocidad=Entry(self.ventana,textvariable=self.var_velocidad)
+        self.velocidad.pack(pady=5)
+        
+        Label(self.ventana,text="Potencia: ").pack(pady=5)
+        self.potencia=Entry(self.ventana,textvariable=self.var_potencia)
+        self.potencia.pack(pady=5)
+        
+        Label(self.ventana,text="# de Asientos: ").pack(pady=5)
+        self.asientos=Entry(self.ventana,textvariable=self.var_asientos)
+        self.asientos.pack(pady=5)
+        
+        self.btn_modificar=Button(self.ventana,text=":: Modificar ::",state="disabled",command=lambda: {self.actualizarCochesController(),self.actualizarCochesView()})
+        self.btn_modificar.pack(pady=5)
+        
+        Button(self.ventana,text=":: Regresar ::",command=self.menuAcciones).pack(pady=5)
     def mostrarCochesView(self):
         self.borrarPantalla()
         Label(self.ventana, text="Lista de Coches").pack(pady=10)
@@ -117,17 +141,17 @@ class App:
         if estado:
             if tipoAccion == "borrar":
                 self.btn_eliminar.config(state=tk.NORMAL)
-            elif tipoAccion == "actualizar":
-                self.btn_actualizar.config(state=tk.NORMAL)
+            elif tipoAccion == "modificar":
+                self.btn_modificar.config(state=tk.NORMAL)
         else:
             if tipoAccion == "borrar":
                 self.btn_eliminar.config(state=tk.DISABLED)
-            elif tipoAccion == "actualizar":
-                self.btn_actualizar.config(state=tk.DISABLED)
+            elif tipoAccion == "modificar":
+                self.btn_modificar.config(state=tk.DISABLED)
 
     def confirmacion_eliminar(self, tipo):
         resp = messagebox.askyesno(title="Confirmación", message=f"¿Estás seguro de que deseas {tipo} este coche?") 
-        if resp == "Yes":
+        if resp:
             return True
         else:
             return False
@@ -149,21 +173,30 @@ class App:
         if resp == True:
             respuesta = cochesbd.Cochesbd.eliminar(id)
             self.respuesta_sql(respuesta)
-    
+
+
         
             
     def actualizarCochesController(self):
-        id = self.idActualizar.get()
+        id = self.id.get()
         coche1 = cochesbd.Cochesbd(self.marcaAct.get(),self.colorAct.get(),self.modeloAct.get(),self.velocidadAct.get(),self.potenciaAct.get(),self.asientosAct.get(),)
         respuesta = coche1.actualizar(id)
         self.respuesta_sql(respuesta)
         del coche1
     def buscarController(self,tipoAccion):
-        id = self.idBorrar.get()
+        #idBorrar
+        id = self.id.get()
         coche1 = cochesbd.Cochesbd.buscar(id)
         if len(coche1) > 0:
             messagebox.showinfo(title="registro encontrado",message=f"El coche con id {id} existe en la base de datos puiedes {tipoAccion}lo")
             self.cambiarEstadoBoton(True, tipoAccion)
+            if tipoAccion=="modificar":
+                self.var_marca.set(coche1[0][1])
+                self.var_color.set(coche1[0][2])
+                self.var_modelo.set(coche1[0][3])
+                self.var_velocidad.set(coche1[0][4])
+                self.var_potencia.set(coche1[0][5])
+                self.var_asientos.set(coche1[0][6])
         else:
             messagebox.showerror(title="registro no encontrado",message=f"El coche con id {id} no existe en la base de datos")
             self.cambiarEstadoBoton(False, tipoAccion)
