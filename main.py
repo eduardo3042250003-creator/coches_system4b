@@ -1,6 +1,6 @@
 from coches import cochesbd
 import tkinter as tk
-from tkinter import Tk,Label,Entry,Button,StringVar, messagebox,Menu
+from tkinter import Tk,Label,Entry,Button,StringVar, messagebox,Menu, Frame 
 from tkinter import ttk
 class App:
     def __init__(self,ventana):
@@ -15,10 +15,8 @@ class App:
         
             
     def barraMenu(self):
-        #Menu de Opciones
         menuBar = Menu(self.ventana)
         self.ventana.config(menu=menuBar)
-
 
         menuPrincipal = Menu(menuBar , tearoff=False)
         menuBar.add_cascade(label="Principal" , menu=menuPrincipal)
@@ -44,66 +42,79 @@ class App:
     def menuAcciones(self,):
         self.borrarPantalla()
         self.barraMenu()
+        self.frame1 = Frame(self.ventana, padx=10, pady=10)
+        self.frame1.pack(pady=5)
         tipo = "Coches"
-        Label (self.ventana, text = f':::: menu de {tipo}:::: ').pack(pady = 10)
-        Button(self.ventana, text = f"1.-agregar", command=self.InsertarCochesView).pack(pady=10)
-        Button(self.ventana, text = f"2.-borrar", command=self.borrarCochesView).pack(pady=10)
-        Button(self.ventana, text = f"3.- modificar", command=self.actualizarCochesView).pack(pady=10)
-        Button(self.ventana, text = f"4.- mostrar", command=self.mostrarCochesView).pack(pady=10)
-        Button(self.ventana, text = f"5.-salir", command=self.main).pack(pady=10)
+        Label (self.frame1, text = ':::: menu de coches:::: ').grid(pady = 10)
+        Button(self.frame1, text = "agregar",width=10,height=3, command=self.InsertarCochesView).grid(row=1, column=0, padx=5, pady=5, sticky="e")
+        Button(self.frame1, text = "borrar",width=10,height=3, command=self.borrarCochesView).grid(row=1, column=1, padx=5, pady=5, sticky="w")
+        Button(self.frame1, text = "modificar",width=10,height=3, command=self.actualizarCochesView).grid(row=2, column=0, padx=5, pady=5, sticky="e")
+        Button(self.frame1, text = "mostrar",width=10,height=3, command=self.mostrarCochesView).grid(row=2, column=1, padx=5, pady=5, sticky="w")
+        Button(self.frame1, text = "salir",width=10,height=3, command=self.main).grid(row=3, column=1, padx=5, pady=5)
     def InsertarCochesView(self):
         self.borrarPantalla()
         self.barraMenu()
         Label(self.ventana, text="ingresar datos del Coche").pack(pady=10)
-        Label(self.ventana, text="Marca").pack(pady=10)
-        self.marca = Entry(self.ventana)
+        
+
+        self.frame1 = Frame(self.ventana, padx=10, pady=10)
+        self.frame1.pack(pady=5)
+        
+        Label(self.frame1, text="Marca").grid(row=0, column=0, padx=5, pady=5, sticky="e")
+        self.marca = Entry(self.frame1)
         self.marca.focus()
-        self.marca.pack(pady=5)
-        Label(self.ventana, text="Color").pack(pady=10)
-        self.color = Entry(self.ventana)
-        self.color.pack(pady=5)
-        Label(self.ventana, text="Modelo").pack(pady=10)
-        self.modelo = Entry(self.ventana)
-        self.modelo.pack(pady=5)
-        Label(self.ventana, text="Velocidad").pack(pady=10)
-        self.velocidad = Entry(self.ventana)
-        self.velocidad.pack(pady=5)
-        Label(self.ventana, text="Potencia").pack(pady=10)
-        self.potencia = Entry(self.ventana)
-        self.potencia.pack(pady=5)
-        Label(self.ventana, text="asientos").pack(pady=10)
-        self.asientos = Entry(self.ventana)
-        self.asientos.pack(pady=5)
-        Button(self.ventana, text='agregar', command=lambda: {self.insertarCochesController(), self.InsertarCochesView()}).pack(pady=5)
-        Button(self.ventana, text='::Regresar::', command= self.menuAcciones).pack(pady=5)
+        self.marca.grid(row=0, column=1, padx=5, pady=5, sticky="w")
+        Label(self.frame1, text="Color").grid(row=1, column=0, padx=5, pady=5, sticky="e")
+        self.color = Entry(self.frame1)
+        self.color.grid(row=1, column=1, padx=5, pady=5, sticky="w")
+        Label(self.frame1, text="Modelo").grid(row=2, column=0, padx=5, pady=5, sticky="e")
+        self.modelo = Entry(self.frame1)
+        self.modelo.grid(row=2, column=1, padx=5, pady=5, sticky="w")
+        Label(self.frame1, text="Velocidad").grid(row=3, column=0, padx=5, pady=5, sticky="e")
+        self.velocidad = Entry(self.frame1)
+        self.velocidad.grid(row=3, column=1, padx=5, pady=5, sticky="w")
+        Label(self.frame1, text="Potencia").grid(row=4, column=0, padx=5, pady=5, sticky="e")
+        self.potencia = Entry(self.frame1)
+        self.potencia.grid(row=4, column=1, padx=5, pady=5, sticky="w")
+        Label(self.frame1, text="asientos").grid(row=5, column=0, padx=5, pady=5, sticky="e")
+        self.asientos = Entry(self.frame1)
+        self.asientos.grid(row=5, column=1, padx=5, pady=5, sticky="w")
+        Button(self.frame1, text='agregar', command=lambda: {self.insertarCochesController(), self.InsertarCochesView()}).grid(row=6, column=0, pady=10, padx=5,sticky="e")
+        Button(self.frame1, text='::Regresar::', command= self.menuAcciones).grid(row=6, column=1, pady=10, padx=5, sticky="w")
     def borrarCochesView(self):
         self.borrarPantalla()
         self.barraMenu()
-        Label(self.ventana, text="ingresar el id del coche que deseas borrar").pack(pady=10)
-        self.idBorrar = Entry(self.ventana)
-        self.idBorrar.focus()
-        self.idBorrar.pack(pady = 5)
-        self.btn_buscar = Button(self.ventana, text='buscar', command= lambda: self.buscarController("borrar"))
-        self.btn_buscar.pack(pady=5)
-        self.btn_eliminar = Button(self.ventana, text='eliminar', command= lambda:{self.borrarCochesController(), self.borrarCochesView()})
+        self.frame1 = Frame(self.ventana, padx=10, pady=10)
+        self.frame1.pack(pady=5)
+        Label(self.frame1, text="ID:").grid(row=0, column=0,columnspan=2, padx=5, pady=5)
+        self.id = Entry(self.frame1)
+        self.id.focus()
+        self.id.grid(row=1, column=0, padx=5, pady=5, sticky="w")
+        self.btn_buscar = Button(self.frame1, text='buscar', command= lambda: self.buscarController("borrar"))
+        self.btn_buscar.grid(row=1, column=1, pady=5, padx=5, sticky="w")
+        self.btn_eliminar = Button(self.frame1, text='eliminar', command= lambda:{self.borrarCochesController(), self.borrarCochesView()})
         self.btn_eliminar.config(state=tk.DISABLED)
-        self.btn_eliminar.pack(pady=5)
-        Button(self.ventana, text='::Regresar::', command= self.menuAcciones).pack(pady=5)
+        self.btn_eliminar.grid(row=2, column=0, pady=5, padx=5, sticky="e")
+        Button(self.frame1, text='::Regresar::', command= self.menuAcciones).grid(row=2, column=1, pady=10, padx=10, sticky="w")
+        
     def actualizarCochesView(self):
 
         self.borrarPantalla()
         self.barraMenu()
-        Label(self.ventana,text="...Ingresar el ID del coche a modificar").pack(pady=10)
+        self.frame1 = Frame(self.ventana, padx=10, pady=10)
+        self.frame1.pack(pady=5)
+        Label(self.frame1, text="...Ingresar el ID del coche a modificar").grid(row=0, column=0, columnspan=2, pady=10)
         
-        Label(self.ventana,text="ID: ").pack(pady=5)
-        self.id=Entry(self.ventana)
+        Label(self.frame1, text="ID: ").grid(row=1, column=0, pady=5, sticky="e")
+        self.id=Entry(self.frame1)
         self.id.focus()
-        self.id.pack(pady=5)
+        self.id.grid(row=1, column=1, pady=5, padx=5, )
+
         
-        self.btn_buscar=Button(self.ventana,text="Buscar",command=lambda:self.buscarController("modificar"))
-        self.btn_buscar.pack(pady=5)
+        self.btn_buscar=Button(self.frame1,text="Buscar",command=lambda:self.buscarController("modificar"))
+        self.btn_buscar.grid(row=2, column=0, pady=5,columnspan=2, padx=5)
         
-        Label(self.ventana,text="...Datos del Coche").pack(pady=10)
+        Label(self.frame1, text="...Datos del Coche: ").grid(row=3, column=0, columnspan=2, pady=5)
         
         # Variables asociadas a los campos
         self.var_marca = StringVar()
@@ -113,34 +124,37 @@ class App:
         self.var_potencia = StringVar()
         self.var_asientos = StringVar()
         
-        Label(self.ventana,text="Marca: ").pack(pady=5)
-        self.marca=Entry(self.ventana,textvariable=self.var_marca)
-        self.marca.pack(pady=5)
+        self.frame2 = Frame(self.ventana, padx=10, pady=10)
+        self.frame2.pack(pady=5)
         
-        Label(self.ventana,text="Color: ").pack(pady=5)
-        self.color=Entry(self.ventana,textvariable=self.var_color)
-        self.color.pack(pady=5)
+        Label(self.frame2, text="Marca: ").grid(row=0, column=0, pady=5, sticky="e")
+        self.marca=Entry(self.frame2, textvariable=self.var_marca)
+        self.marca.grid(row=0, column=1, pady=5, sticky="w")
         
-        Label(self.ventana,text="Modelo: ").pack(pady=5)
-        self.modelo=Entry(self.ventana,textvariable=self.var_modelo)
-        self.modelo.pack(pady=5)
+        Label(self.frame2, text="Color: ").grid(row=1, column=0, pady=5, sticky="e")
+        self.color=Entry(self.frame2, textvariable=self.var_color)
+        self.color.grid(row=1, column=1, pady=5, sticky="w")
         
-        Label(self.ventana,text="Velocidad: ").pack(pady=5)
-        self.velocidad=Entry(self.ventana,textvariable=self.var_velocidad)
-        self.velocidad.pack(pady=5)
+        Label(self.frame2, text="Modelo: ").grid(row=2, column=0, pady=5, sticky="e")
+        self.modelo=Entry(self.frame2, textvariable=self.var_modelo)
+        self.modelo.grid(row=2, column=1, pady=5, sticky="w")
         
-        Label(self.ventana,text="Potencia: ").pack(pady=5)
-        self.potencia=Entry(self.ventana,textvariable=self.var_potencia)
-        self.potencia.pack(pady=5)
+        Label(self.frame2, text="Velocidad: ").grid(row=3, column=0, pady=5, sticky="e")
+        self.velocidad=Entry(self.frame2, textvariable=self.var_velocidad)
+        self.velocidad.grid(row=3, column=1, pady=5, sticky="w")
         
-        Label(self.ventana,text="# de Asientos: ").pack(pady=5)
-        self.asientos=Entry(self.ventana,textvariable=self.var_asientos)
-        self.asientos.pack(pady=5)
+        Label(self.frame2, text="Potencia: ").grid(row=4, column=0, pady=5, sticky="e")
+        self.potencia=Entry(self.frame2, textvariable=self.var_potencia)
+        self.potencia.grid(row=4, column=1, pady=5, sticky="w")
         
-        self.btn_modificar=Button(self.ventana,text=":: Modificar ::",state="disabled",command=lambda: {self.actualizarCochesController(),self.actualizarCochesView()})
-        self.btn_modificar.pack(pady=5)
+        Label(self.frame2, text="# de Asientos: ").grid(row=5, column=0, pady=5, sticky="e")
+        self.asientos=Entry(self.frame2, textvariable=self.var_asientos)
+        self.asientos.grid(row=5, column=1, pady=5, sticky="w")
         
-        Button(self.ventana,text=":: Regresar ::",command=self.menuAcciones).pack(pady=5)
+        self.btn_modificar=Button(self.frame2,text=":: Modificar ::",state="disabled",command=lambda: {self.actualizarCochesController(),self.actualizarCochesView()})
+        self.btn_modificar.grid(row=6, column=0, pady=10, padx=5, sticky="e")
+        
+        Button(self.frame2,text=":: Regresar ::",command=self.menuAcciones).grid(row=6, column=1, pady=5, padx=5, sticky="w")
     def mostrarCochesView(self):
         self.borrarPantalla()
         self.barraMenu()
@@ -191,7 +205,7 @@ class App:
         self.respuesta_sql(respuesta)
         del coche1
     def borrarCochesController(self):
-        id = self.idBorrar.get()
+        id = self.id.get()
         resp = self.confirmacion_eliminar("eliminar") 
         if resp == True:
             respuesta = cochesbd.Cochesbd.eliminar(id)
