@@ -1,7 +1,7 @@
 from coches import cochesbd
 import tkinter as tk
-from tkinter import Tk,Label,Entry,Button,StringVar, messagebox,Menu, Frame 
-from tkinter import ttk
+from tkinter import Tk,Label,Entry,Button,StringVar, messagebox,Menu, Frame, ttk
+ 
 class App:
     def __init__(self,ventana):
         self.ventana = ventana
@@ -159,21 +159,19 @@ class App:
         self.borrarPantalla()
         self.barraMenu()
         Label(self.ventana, text="Lista de Coches").pack(pady=10)
-        datos = self.mostrarCochescontroller()
-        style = ttk.Style()
-        style.theme_use("clam")
-        style.configure("Treeview",borderwidth=2,relief="solid")
-        style.configure("Treeview.Heading",relief="solid",borderwidth=1)
-        columnas = ("id","marca","color","modelo","velocidad","potencia","asientos")
-        tabla = ttk.Treeview(self.ventana,columns=columnas,show="headings")
-        for col in columnas:
-            tabla.heading(col, text=col)
-            
-            tabla.column(col, width=60, anchor="center")
-        if datos:
-            for coche in datos:
-                tabla.insert("",tk.END, values=coche)
-        tabla.pack(pady=10, fill="both", expand=True)
+        self.tree =ttk.Treeview(self.ventana, columns=("ID", "Marca", "Color", "Modelo","Velocidad","Potencia","Asientos"), show="headings")
+        self.tree.heading("ID", text="ID")
+        self.tree.heading("Marca", text="Marca")
+        self.tree.heading("Color", text="Color")
+        self.tree.heading("Modelo", text="Modelo")
+        self.tree.heading("Velocidad", text="Velocidad")
+        self.tree.heading("Potencia", text="Potencia")
+        self.tree.heading("Asientos", text="Asientos")
+        self.tree.pack(fill="both", expand=False)
+
+        self.mostrarCochescontroller()
+
+
         Button(self.ventana, text="Volver", command=self.menuAcciones).pack(pady=10)
     def cambiarEstadoBoton(self, estado, tipoAccion):
         if estado:
@@ -237,8 +235,10 @@ class App:
 
 
     def mostrarCochescontroller(self):
-        obtenerCoches =  cochesbd.Cochesbd.consultar()
-        return obtenerCoches
+        for row in self.tree.get_children():
+            self.tree.delete(row)
+        for row in cochesbd.Cochesbd.consultar():
+            self.tree.insert("", "end", values=row)
 if __name__ == "__main__":
     ventana = Tk()
     app = App(ventana)
