@@ -1,0 +1,214 @@
+from controllers.coches_controller import CochesController
+import tkinter as tk
+from tkinter import Tk,Label,Entry,Button,StringVar, messagebox,Menu, Frame, ttk
+
+
+class CochesView:
+    def __init__(self,ventana):
+        self.ventana = ventana
+        self.ventana.title ("Gestor de coches")
+        self.ventana.geometry("600x600")
+        self.ventana.resizable(0,0)
+        self.main()
+    def borrarPantalla (self):
+        for widget in self.ventana.winfo_children():
+            widget.destroy()   
+            
+    def barraMenu(self):
+        menuBar = Menu(self.ventana)
+        self.ventana.config(menu=menuBar)
+
+        menuPrincipal = Menu(menuBar , tearoff=False)
+        menuBar.add_cascade(label="Principal" , menu=menuPrincipal)
+        menuPrincipal.add_command(label="Menu Principal",command=self.main)
+        menuPrincipal.add_command(label="Menu Acciones",command=self.menuAcciones)
+        menuPrincipal.add_separator()
+        menuPrincipal.add_command(label="Salir",command=self.ventana.quit)
+                
+        accionesMenu = Menu(menuBar , tearoff=False)
+        menuBar.add_cascade(label="Acciones" , menu=accionesMenu)
+        accionesMenu.add_command(label="Agregar",command=self.InsertarCochesView )
+        accionesMenu.add_command(label="Borrar",command=self.borrarCochesView)
+        accionesMenu.add_command(label="Modificar",command=self.actualizarCochesView)
+        accionesMenu.add_command(label="Mostrar",command=self.mostrarCochesView)
+        accionesMenu.add_separator()
+        accionesMenu.add_command(label="Regresar",command=self.main)
+    def main (self):
+        self.borrarPantalla()
+        self.barraMenu()
+        self.frame1 = Frame(self.ventana, padx=10, pady=10)
+        self.frame1.pack(pady=5)
+        Label (self.frame1, text = '::: MENU PRINCIPAL:::').grid(pady = 10)
+        Button(self.frame1,text='1.- Coches',width=10,height=3, command=self.menuAcciones).grid(row=1, column=0, padx=5, pady=5, sticky="e")
+        Button(self.frame1,text='2.- salir',width=10,height=3,command=self.ventana.quit).grid(row=1, column=1, padx=5, pady=5, sticky="w")
+    def menuAcciones(self,):
+        self.borrarPantalla()
+        self.barraMenu()
+        self.frame1 = Frame(self.ventana, padx=10, pady=10)
+        self.frame1.pack(pady=5)
+        tipo = "Coches"
+        Label (self.frame1, text = ':::: menu de coches:::: ').grid(pady = 10)
+        Button(self.frame1, text = "agregar",width=10,height=3, command=self.InsertarCochesView).grid(row=1, column=0, padx=5, pady=5, sticky="e")
+        Button(self.frame1, text = "borrar",width=10,height=3, command=self.borrarCochesView).grid(row=1, column=1, padx=5, pady=5, sticky="w")
+        Button(self.frame1, text = "modificar",width=10,height=3, command=self.actualizarCochesView).grid(row=2, column=0, padx=5, pady=5, sticky="e")
+        Button(self.frame1, text = "mostrar",width=10,height=3, command=self.mostrarCochesView).grid(row=2, column=1, padx=5, pady=5, sticky="w")
+        Button(self.frame1, text = "salir",width=10,height=3, command=self.main).grid(row=3, column=1, padx=5, pady=5)
+    def InsertarCochesView(self):
+        self.borrarPantalla()
+        self.barraMenu()
+        Label(self.ventana, text="ingresar datos del Coche").pack(pady=10)
+
+        self.frame1 = Frame(self.ventana, padx=10, pady=10)
+        self.frame1.pack(pady=5)
+        
+        Label(self.frame1, text="Marca").grid(row=0, column=0, padx=5, pady=5, sticky="e")
+        self.marca = Entry(self.frame1)
+        self.marca.focus()
+        self.marca.grid(row=0, column=1, padx=5, pady=5, sticky="w")
+        Label(self.frame1, text="Color").grid(row=1, column=0, padx=5, pady=5, sticky="e")
+        self.color = Entry(self.frame1)
+        self.color.grid(row=1, column=1, padx=5, pady=5, sticky="w")
+        Label(self.frame1, text="Modelo").grid(row=2, column=0, padx=5, pady=5, sticky="e")
+        self.modelo = Entry(self.frame1)
+        self.modelo.grid(row=2, column=1, padx=5, pady=5, sticky="w")
+        Label(self.frame1, text="Velocidad").grid(row=3, column=0, padx=5, pady=5, sticky="e")
+        self.velocidad = Entry(self.frame1)
+        self.velocidad.grid(row=3, column=1, padx=5, pady=5, sticky="w")
+        Label(self.frame1, text="Potencia").grid(row=4, column=0, padx=5, pady=5, sticky="e")
+        self.potencia = Entry(self.frame1)
+        self.potencia.grid(row=4, column=1, padx=5, pady=5, sticky="w")
+        Label(self.frame1, text="asientos").grid(row=5, column=0, padx=5, pady=5, sticky="e")
+        self.asientos = Entry(self.frame1)
+        self.asientos.grid(row=5, column=1, padx=5, pady=5, sticky="w")
+        Button(self.frame1, text='agregar', command=lambda: {CochesController.insertarCochesController(self), self.InsertarCochesView()}).grid(row=6, column=0, pady=10, padx=5,sticky="e")
+        Button(self.frame1, text='::Regresar::', command= self.menuAcciones).grid(row=6, column=1, pady=10, padx=5, sticky="w")
+    def borrarCochesView(self):
+        self.borrarPantalla()
+        self.barraMenu()
+        self.frame1 = Frame(self.ventana, padx=10, pady=10)
+        self.frame1.pack(pady=5)
+        Label(self.frame1, text="ID:").grid(row=0, column=0,columnspan=2, padx=5, pady=5)
+        self.id = Entry(self.frame1)
+        self.id.focus()
+        self.id.grid(row=1, column=0, padx=5, pady=5, sticky="w")
+        self.btn_buscar = Button(self.frame1, text='buscar', command= lambda: CochesController.buscarController(self,"borrar"))
+        self.btn_buscar.grid(row=1, column=1, pady=5, padx=5, sticky="w")
+        self.btn_eliminar = Button(self.frame1, text='eliminar', command= lambda:{CochesController.borrarCochesController(self), self.borrarCochesView()})
+        self.btn_eliminar.config(state=tk.DISABLED)
+        self.btn_eliminar.grid(row=2, column=0, pady=5, padx=5, sticky="e")
+        Button(self.frame1, text='::Regresar::', command= self.menuAcciones).grid(row=2, column=1, pady=10, padx=10, sticky="w")
+        
+    def actualizarCochesView(self):
+        self.borrarPantalla()
+        self.barraMenu()
+        self.frame1 = Frame(self.ventana, padx=10, pady=10)
+        self.frame1.pack(pady=5)
+        Label(self.frame1, text="...Ingresar el ID del coche a modificar").grid(row=0, column=0, columnspan=2, pady=10)
+        
+        Label(self.frame1, text="ID: ").grid(row=1, column=0, pady=5, sticky="e")
+        self.id=Entry(self.frame1)
+        self.id.focus()
+        self.id.grid(row=1, column=1, pady=5, padx=5, )
+
+        
+        self.btn_buscar=Button(self.frame1,text="Buscar",command=lambda:CochesController.buscarController(self,"modificar"))
+        self.btn_buscar.grid(row=2, column=0, pady=5,columnspan=2, padx=5)
+        
+        Label(self.frame1, text="...Datos del Coche: ").grid(row=3, column=0, columnspan=2, pady=5)
+        
+        # Variables asociadas a los campos
+        self.var_marca = StringVar()
+        self.var_color = StringVar()
+        self.var_modelo = StringVar()
+        self.var_velocidad = StringVar()
+        self.var_potencia = StringVar()
+        self.var_asientos = StringVar()
+        
+        self.frame2 = Frame(self.ventana, padx=10, pady=10)
+        self.frame2.pack(pady=5)
+        
+        Label(self.frame2, text="Marca: ").grid(row=0, column=0, pady=5, sticky="e")
+        self.marca=Entry(self.frame2, textvariable=self.var_marca)
+        self.marca.grid(row=0, column=1, pady=5, sticky="w")
+        
+        Label(self.frame2, text="Color: ").grid(row=1, column=0, pady=5, sticky="e")
+        self.color=Entry(self.frame2, textvariable=self.var_color)
+        self.color.grid(row=1, column=1, pady=5, sticky="w")
+        
+        Label(self.frame2, text="Modelo: ").grid(row=2, column=0, pady=5, sticky="e")
+        self.modelo=Entry(self.frame2, textvariable=self.var_modelo)
+        self.modelo.grid(row=2, column=1, pady=5, sticky="w")
+        
+        Label(self.frame2, text="Velocidad: ").grid(row=3, column=0, pady=5, sticky="e")
+        self.velocidad=Entry(self.frame2, textvariable=self.var_velocidad)
+        self.velocidad.grid(row=3, column=1, pady=5, sticky="w")
+        
+        Label(self.frame2, text="Potencia: ").grid(row=4, column=0, pady=5, sticky="e")
+        self.potencia=Entry(self.frame2, textvariable=self.var_potencia)
+        self.potencia.grid(row=4, column=1, pady=5, sticky="w")
+        
+        Label(self.frame2, text="# de Asientos: ").grid(row=5, column=0, pady=5, sticky="e")
+        self.asientos=Entry(self.frame2, textvariable=self.var_asientos)
+        self.asientos.grid(row=5, column=1, pady=5, sticky="w")
+        
+        self.btn_modificar=Button(self.frame2,text=":: Modificar ::",state="disabled",command=lambda: {CochesController.actualizarCochesController(self),self.actualizarCochesView()})
+        self.btn_modificar.grid(row=6, column=0, pady=10, padx=5, sticky="e")
+        
+        Button(self.frame2,text=":: Regresar ::",command=self.menuAcciones).grid(row=6, column=1, pady=5, padx=5, sticky="w")
+    def mostrarCochesView(self):
+        self.borrarPantalla()
+        self.barraMenu()
+        Label(self.ventana, text="Lista de Coches").pack(pady=10)
+        self.tree =ttk.Treeview(self.ventana, columns=("ID", "Marca", "Color", "Modelo","Velocidad","Potencia","Asientos"), show="headings")
+        self.tree.heading("ID", text="ID")
+        self.tree.heading("Marca", text="Marca")
+        self.tree.heading("Color", text="Color")
+        self.tree.heading("Modelo", text="Modelo")
+        self.tree.heading("Velocidad", text="Velocidad")
+        self.tree.heading("Potencia", text="Potencia")
+        self.tree.heading("Asientos", text="Asientos")
+        self.tree.pack(fill="both", expand=False)
+
+        CochesController.mostrarCochescontroller(self)
+
+
+        Button(self.ventana, text="Volver", command=self.menuAcciones).pack(pady=10)
+    def cambiarEstadoBoton(self, estado, tipoAccion):
+        if estado:
+            if tipoAccion == "borrar":
+                self.btn_eliminar.config(state=tk.NORMAL)
+            elif tipoAccion == "modificar":
+                self.btn_modificar.config(state=tk.NORMAL)
+        else:
+            if tipoAccion == "borrar":
+                self.btn_eliminar.config(state=tk.DISABLED)
+            elif tipoAccion == "modificar":
+                self.btn_modificar.config(state=tk.DISABLED)
+
+    def confirmacion_eliminar(self, tipo):
+        resp = messagebox.askyesno(title="Confirmación", message=f"¿Estás seguro de que deseas {tipo} este coche?") 
+        if resp:
+            return True
+        else:
+            return False
+       
+    def respuesta_sql(self,respuesta):
+        if respuesta:
+            messagebox.showinfo(title="::EXITO::",message="Accion como yo ...exitosa")
+        else:
+            messagebox.showerror(title='VERIFIQUE ', message="Esta accion no pudo realizarse con exito")
+
+    def encontro(self,coche1,tipoAccion,id):
+        if len(coche1) > 0:
+            messagebox.showinfo(title="registro encontrado",message=f"El coche con id {id} existe en la base de datos puedes {tipoAccion}lo")
+            self.cambiarEstadoBoton(True, tipoAccion)
+            if tipoAccion=="modificar":
+                self.var_marca.set(coche1[0][1])
+                self.var_color.set(coche1[0][2])
+                self.var_modelo.set(coche1[0][3])
+                self.var_velocidad.set(coche1[0][4])
+                self.var_potencia.set(coche1[0][5])
+                self.var_asientos.set(coche1[0][6])
+        else:
+                messagebox.showerror(title="registro no encontrado",message=f"El coche con id {id} no existe en la base de datos")
+                self.cambiarEstadoBoton(False, tipoAccion)

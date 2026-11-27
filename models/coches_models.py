@@ -1,5 +1,5 @@
 from conexionBD import conexion, cursor 
-class Cochesbd:
+class CochesModel:
     def __init__(self,marca,color,modelo,velocidad,potencia ,asientos):
       self._marca = marca
       self._color = color
@@ -25,6 +25,13 @@ class Cochesbd:
         except:
             return []
     @staticmethod
+    def buscar(id):
+        try:
+            cursor.execute("select * from coches where id=%s", (id,))
+            return cursor.fetchall()
+        except:
+            return []
+    @staticmethod
     def eliminar(id):
         try:
             cursor.execute( "select * from coches where id=%s",(id,))
@@ -42,7 +49,7 @@ class Cochesbd:
             cursor.execute( "select * from coches where id=%s",(id,))
             lista = cursor.fetchall()
             if len (lista) > 0:
-                sql = "UPDATE coches SET marca = %s, color = %s, modelo = %s, velocidad = %s, potencia = %s, asientos = %s WHERE id = %s"
+                sql = "UPDATE coches SET marca = %s, color = %s, modeo = %s, velocidad = %s, potencia = %s, asientos = %s WHERE id = %s"
                 valores = (self._marca, self._color, self._modelo, self._velocidad, self._potencia, self._asientos, id)
                 cursor.execute(sql, valores)
                 conexion.commit()
